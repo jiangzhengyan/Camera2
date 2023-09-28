@@ -17,8 +17,6 @@ import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.widget.RelativeLayout;
 
-import com.ca.camera2.R;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -105,7 +103,7 @@ public class MainActivity extends AppCompatActivity {
 
         switch (orientation) {
             case Configuration.ORIENTATION_PORTRAIT:
-                Log.i(TAG, "onConfigurationChanged: " + "竖屏" );
+                Log.i(TAG, "onConfigurationChanged: " + "竖屏");
                 // 竖屏
                 RelativeLayout.LayoutParams layoutParams = new RelativeLayout.LayoutParams(1080, 1920);
                 layoutParams.addRule(RelativeLayout.CENTER_IN_PARENT);
@@ -125,7 +123,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void openCamera() {
         CameraManager cameraManager = (CameraManager) getSystemService(Context.CAMERA_SERVICE);
-        mSurfaceView.getHolder().setFixedSize(9999,9999);
+        mSurfaceView.getHolder().setFixedSize(9999, 9999);
         try {
             String cameraId = getFrontCameraId(cameraManager);
 
