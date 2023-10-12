@@ -1,6 +1,7 @@
 package com.ca.camera2;
 
 import android.Manifest;
+import android.app.Activity;
 import android.content.Context;
 import android.content.pm.PackageManager;
 import android.content.res.Configuration;
@@ -10,58 +11,72 @@ import android.hardware.camera2.CameraCharacteristics;
 import android.hardware.camera2.CameraDevice;
 import android.hardware.camera2.CameraManager;
 import android.hardware.camera2.CaptureRequest;
-import android.os.Bundle;
+import android.util.AttributeSet;
 import android.util.Log;
 import android.view.Surface;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
-import android.widget.RelativeLayout;
+import android.view.ViewGroup;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
+/**
+ * 本类的主要功能是 :   开启摄像头
+ * <p>
+ * 1,初始化,{@link CameraView#initCamera()}
+ * 2,权限,{@link CameraView#onRequestPermissionsResult(int, String[], int[])}
+ * 3,生命周期,{@link CameraView#onPause()}
+ *
+ * @author koko  2023/10/12 11:38
+ */
+public class CameraView extends SurfaceView {
 
-public class MainActivity extends AppCompatActivity {
-    private static final String TAG = "MainActivity11";
+    private static final String TAG = "CameraView";
     private static final int CAMERA_PERMISSION_REQUEST_CODE = 22;
-    private SurfaceView mSurfaceView;
     private CameraDevice mCameraDevice;
     private CameraCaptureSession mCaptureSession;
     private CaptureRequest.Builder mPreviewBuilder;
 
-    // 处理权限请求的回调
-    @Override
-    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
-        if (requestCode == CAMERA_PERMISSION_REQUEST_CODE) {
-            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                // 相机权限已被授予，打开相机
-                openCamera();
-            } else {
-                // 相机权限被拒绝，显示一个提示消息或执行其他操作
-            }
-        }
+    public CameraView(Context context) {
+        super(context);
+        initView();
     }
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main2);
+    public CameraView(Context context, AttributeSet attrs) {
+        super(context, attrs);
+        initView();
+    }
 
-        mSurfaceView = findViewById(R.id.surfaceView);
+    public CameraView(Context context, AttributeSet attrs, int defStyleAttr) {
+        super(context, attrs, defStyleAttr);
+        initView();
+    }
 
-        SurfaceHolder surfaceHolder = mSurfaceView.getHolder();
+    public CameraView(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
+        super(context, attrs, defStyleAttr, defStyleRes);
+        initView();
+    }
+
+    private void initView() {
+
+    }
+
+    public void initCamera() {
+        changeCameraOri(getResources().getConfiguration().orientation);
+
+        SurfaceHolder surfaceHolder = getHolder();
         surfaceHolder.addCallback(new SurfaceHolder.Callback() {
             @Override
             public void surfaceCreated(SurfaceHolder holder) {
                 // 初始化相机
                 // 在需要使用相机的地方进行权限检查
-                if (ContextCompat.checkSelfPermission(MainActivity.this, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
+                if (ContextCompat.checkSelfPermission(getContext(), Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
                     // 如果权限未被授予，则请求相机权限
-                    ActivityCompat.requestPermissions(MainActivity.this,
+                    ActivityCompat.requestPermissions((Activity) getContext(),
                             new String[]{Manifest.permission.CAMERA},
                             CAMERA_PERMISSION_REQUEST_CODE);
                 } else {
@@ -82,35 +97,45 @@ public class MainActivity extends AppCompatActivity {
                 closeCamera();
             }
         });
-        changeCameraOri(getResources().getConfiguration().orientation);
+    }
+
+    // 处理权限请求的回调
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+        if (requestCode == CAMERA_PERMISSION_REQUEST_CODE) {
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                // 相机权限已被授予，打开相机
+                openCamera();
+            } else {
+                // 相机权限被拒绝，显示一个提示消息或执行其他操作
+            }
+        }
     }
 
 
-    @Override
     protected void onPause() {
-        super.onPause();
         closeCamera();
     }
 
-    @Override
     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
         changeCameraOri(newConfig.orientation);
     }
-
 
     private void changeCameraOri(int orientation) {
         float ratioScreen = 0.28f;
         float ratioCamera = 16 / 9f;
         //以窄边为标准
         //竖屏
-        int screenWidthPortrait = (int) (PhoneHelper.getScreenWidthReal(this) * ratioScreen);
+        int screenWidthPortrait = (int) (PhoneHelper.getScreenWidthReal(getContext()) * ratioScreen);
         int screenHeightPortrait = (int) (screenWidthPortrait * ratioCamera);
         //横屏
-        int screenHeightLandScape = (int) (PhoneHelper.getScreenHeightReal(this) * ratioScreen);
+        int screenHeightLandScape = (int) (PhoneHelper.getScreenHeightReal(getContext()) * ratioScreen);
         int screenWidthLandScape = (int) (screenHeightLandScape * ratioCamera);
 
-        RelativeLayout.LayoutParams layoutParams = (RelativeLayout.LayoutParams) mSurfaceView.getLayoutParams();
+        ViewGroup.LayoutParams layoutParams = getLayoutParams();
+        if (layoutParams == null) {
+            return;
+        }
 
         switch (orientation) {
             case Configuration.ORIENTATION_PORTRAIT:
@@ -118,26 +143,24 @@ public class MainActivity extends AppCompatActivity {
                 // 竖屏1080-1920
                 layoutParams.width = screenWidthPortrait;
                 layoutParams.height = screenHeightPortrait;
-                mSurfaceView.setLayoutParams(layoutParams);
                 break;
             case Configuration.ORIENTATION_LANDSCAPE:
                 Log.i(TAG, "onConfigurationChanged: " + "横屏");
                 // 横屏1920-1080
                 layoutParams.width = screenWidthLandScape;
                 layoutParams.height = screenHeightLandScape;
-                mSurfaceView.setLayoutParams(layoutParams);
                 break;
         }
     }
 
 
     private void openCamera() {
-        CameraManager cameraManager = (CameraManager) getSystemService(Context.CAMERA_SERVICE);
-        mSurfaceView.getHolder().setFixedSize(9999, 9999);
+        CameraManager cameraManager = (CameraManager) getContext().getSystemService(Context.CAMERA_SERVICE);
+        getHolder().setFixedSize(9999, 9999);
         try {
             String cameraId = getFrontCameraId(cameraManager);
 
-            if (ActivityCompat.checkSelfPermission(this, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
+            if (ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
                 return;
             }
             cameraManager.openCamera(cameraId, new CameraDevice.StateCallback() {
@@ -202,7 +225,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void createCaptureSession() {
         try {
-            SurfaceHolder surfaceHolder = mSurfaceView.getHolder();
+            SurfaceHolder surfaceHolder = getHolder();
             List<Surface> surfaces = new ArrayList<>();
             surfaces.add(surfaceHolder.getSurface());
             mPreviewBuilder = mCameraDevice.createCaptureRequest(CameraDevice.TEMPLATE_PREVIEW);
