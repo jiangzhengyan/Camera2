@@ -17,6 +17,7 @@
     <com.ca.camera2.CameraView
         android:layout_alignParentEnd="true"
         android:layout_width="108dp"
+        android:id="@+id/camera_view"
         android:layout_alignParentBottom="true"
         android:layout_height="192dp"/>
 

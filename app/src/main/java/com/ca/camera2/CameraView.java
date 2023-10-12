@@ -63,11 +63,6 @@ public class CameraView extends SurfaceView {
 
     private void initView() {
 
-    }
-
-    public void initCamera() {
-        changeCameraOri(getResources().getConfiguration().orientation);
-
         SurfaceHolder surfaceHolder = getHolder();
         surfaceHolder.addCallback(new SurfaceHolder.Callback() {
             @Override
@@ -99,6 +94,10 @@ public class CameraView extends SurfaceView {
         });
     }
 
+    public void initCamera() {
+        changeCameraOri(getResources().getConfiguration().orientation);
+    }
+
     // 处理权限请求的回调
     public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
         if (requestCode == CAMERA_PERMISSION_REQUEST_CODE) {
@@ -116,10 +115,13 @@ public class CameraView extends SurfaceView {
         closeCamera();
     }
 
-    public void onConfigurationChanged(Configuration newConfig) {
+
+    @Override
+    protected void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
         changeCameraOri(newConfig.orientation);
     }
+
 
     private void changeCameraOri(int orientation) {
         float ratioScreen = 0.28f;
@@ -151,6 +153,7 @@ public class CameraView extends SurfaceView {
                 layoutParams.height = screenHeightLandScape;
                 break;
         }
+        setLayoutParams(layoutParams);
     }
 
 
