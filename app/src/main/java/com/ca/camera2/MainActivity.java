@@ -100,21 +100,34 @@ public class MainActivity extends AppCompatActivity {
 
 
     private void changeCameraOri(int orientation) {
+        float ratioScreen = 0.28f;
+        float ratioCamera = 16 / 9f;
+        //以窄边为标准
+        //竖屏
+        int screenWidthPortrait = (int) (PhoneHelper.getScreenWidthReal(this) * ratioScreen);
+        int screenHeightPortrait = (int) (screenWidthPortrait * ratioCamera);
+        //横屏
+        int screenHeightLandScape = (int) (PhoneHelper.getScreenHeightReal(this) * ratioScreen);
+        int screenWidthLandScape = (int) (screenHeightLandScape * ratioCamera);
+
 
         switch (orientation) {
             case Configuration.ORIENTATION_PORTRAIT:
                 Log.i(TAG, "onConfigurationChanged: " + "竖屏");
-                // 竖屏
-                RelativeLayout.LayoutParams layoutParams = new RelativeLayout.LayoutParams(1080, 1920);
-                layoutParams.addRule(RelativeLayout.CENTER_IN_PARENT);
+                // 竖屏1080-1920
+                RelativeLayout.LayoutParams layoutParams = new RelativeLayout.LayoutParams(screenWidthPortrait, screenHeightPortrait);
+                layoutParams.addRule(RelativeLayout.ALIGN_PARENT_END);
+                layoutParams.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
                 mSurfaceView.setLayoutParams(layoutParams);
                 break;
             case Configuration.ORIENTATION_LANDSCAPE:
                 Log.i(TAG, "onConfigurationChanged: " + "横屏");
-                // 横屏
-                RelativeLayout.LayoutParams layoutParams1 = new RelativeLayout.LayoutParams(1920, 1080);
+                // 横屏1920-1080
+                RelativeLayout.LayoutParams layoutParams1 = new RelativeLayout.LayoutParams(screenWidthLandScape, screenHeightLandScape);
+
                 // 应用新的布局参数
-                layoutParams1.addRule(RelativeLayout.CENTER_IN_PARENT);
+                layoutParams1.addRule(RelativeLayout.ALIGN_PARENT_END);
+                layoutParams1.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
                 mSurfaceView.setLayoutParams(layoutParams1);
                 break;
         }
