@@ -61,7 +61,7 @@ public class CameraView extends SurfaceView {
         initView();
     }
 
-    private void initView() {
+    public void initView() {
 
         SurfaceHolder surfaceHolder = getHolder();
         surfaceHolder.addCallback(new SurfaceHolder.Callback() {
@@ -157,7 +157,7 @@ public class CameraView extends SurfaceView {
     }
 
 
-    private void openCamera() {
+    public void openCamera() {
         CameraManager cameraManager = (CameraManager) getContext().getSystemService(Context.CAMERA_SERVICE);
         getHolder().setFixedSize(9999, 9999);
         try {
@@ -178,6 +178,7 @@ public class CameraView extends SurfaceView {
                 @Override
                 public void onDisconnected(CameraDevice camera) {
                     camera.close();
+                    Log.e(TAG, "onDisconnected: ");
                     mCameraDevice = null;
                 }
 
