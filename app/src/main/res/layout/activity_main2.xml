@@ -6,14 +6,6 @@
     tools:context=".MainActivity"
     android:id="@+id/rl">
 
-    <SurfaceView
-       android:layout_alignParentEnd="true"
-        android:layout_alignParentBottom="true"
-        android:id="@+id/surfaceView"
-        android:layout_width="108dp"
-        android:visibility="gone"
-        android:layout_height="192dp" />
-
     <com.ca.camera2.CameraView
         android:layout_alignParentEnd="true"
         android:layout_width="108dp"
