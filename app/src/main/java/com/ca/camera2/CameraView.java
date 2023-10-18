@@ -61,7 +61,7 @@ public class CameraView extends SurfaceView {
         initView();
     }
 
-    public void initView() {
+    private void initView() {
 
         SurfaceHolder surfaceHolder = getHolder();
         surfaceHolder.addCallback(new SurfaceHolder.Callback() {
