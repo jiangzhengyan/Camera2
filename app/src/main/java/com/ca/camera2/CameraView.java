@@ -67,6 +67,7 @@ public class CameraView extends SurfaceView {
         surfaceHolder.addCallback(new SurfaceHolder.Callback() {
             @Override
             public void surfaceCreated(SurfaceHolder holder) {
+                Log.e(TAG, "surfaceCreated: ");
                 // 初始化相机
                 // 在需要使用相机的地方进行权限检查
                 if (ContextCompat.checkSelfPermission(getContext(), Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
@@ -82,12 +83,14 @@ public class CameraView extends SurfaceView {
 
             @Override
             public void surfaceChanged(SurfaceHolder holder, int format, int width, int height) {
+                Log.e(TAG, "surfaceChanged: ");
                 // 更新相机预览尺寸
                 updatePreview();
             }
 
             @Override
             public void surfaceDestroyed(SurfaceHolder holder) {
+                Log.e(TAG, "surfaceDestroyed: ");
                 // 释放相机资源
                 closeCamera();
             }
@@ -157,7 +160,7 @@ public class CameraView extends SurfaceView {
     }
 
 
-    public void openCamera() {
+    private void openCamera() {
         CameraManager cameraManager = (CameraManager) getContext().getSystemService(Context.CAMERA_SERVICE);
         getHolder().setFixedSize(9999, 9999);
         try {
@@ -177,15 +180,12 @@ public class CameraView extends SurfaceView {
 
                 @Override
                 public void onDisconnected(CameraDevice camera) {
-                    camera.close();
                     Log.e(TAG, "onDisconnected: ");
-                    mCameraDevice = null;
                 }
 
                 @Override
                 public void onError(CameraDevice camera, int error) {
-                    camera.close();
-                    mCameraDevice = null;
+                    Log.e(TAG, "onError: ");
                 }
             }, null);
         } catch (CameraAccessException e) {
@@ -194,6 +194,7 @@ public class CameraView extends SurfaceView {
     }
 
     private void closeCamera() {
+        Log.e(TAG, "closeCamera: ");
         if (mCaptureSession != null) {
             mCaptureSession.close();
             mCaptureSession = null;
@@ -206,6 +207,9 @@ public class CameraView extends SurfaceView {
 
     private void updatePreview() {
         if (mCameraDevice == null) {
+            return;
+        }
+        if (mCaptureSession == null) {
             return;
         }
         try {
@@ -230,6 +234,7 @@ public class CameraView extends SurfaceView {
     private void createCaptureSession() {
         try {
             SurfaceHolder surfaceHolder = getHolder();
+            surfaceHolder.setFixedSize(getWidth(), getHeight());
             List<Surface> surfaces = new ArrayList<>();
             surfaces.add(surfaceHolder.getSurface());
             mPreviewBuilder = mCameraDevice.createCaptureRequest(CameraDevice.TEMPLATE_PREVIEW);
