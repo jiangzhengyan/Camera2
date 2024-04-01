@@ -5,7 +5,7 @@ android {
     buildToolsVersion "29.0.0"
 
     defaultConfig {
-        applicationId "com.ca.camera2"
+        applicationId "com.smart.camera2"
         minSdkVersion 24
         targetSdkVersion 29
         versionCode 1
