@@ -97,6 +97,9 @@ public class CameraView extends SurfaceView {
         });
     }
 
+    /**
+     * 初始化相机
+     */
     public void initCamera() {
         changeCameraOri(getResources().getConfiguration().orientation);
     }
@@ -114,6 +117,9 @@ public class CameraView extends SurfaceView {
     }
 
 
+    /**
+     * 暂停
+     */
     protected void onPause() {
         closeCamera();
     }
@@ -126,6 +132,10 @@ public class CameraView extends SurfaceView {
     }
 
 
+    /**
+     * 横竖屏处理
+     * @param orientation 横竖屏
+     */
     private void changeCameraOri(int orientation) {
         float ratioScreen = 0.28f;
         float ratioCamera = 16 / 9f;
@@ -160,6 +170,9 @@ public class CameraView extends SurfaceView {
     }
 
 
+    /**
+     * 打开相机
+     */
     private void openCamera() {
         CameraManager cameraManager = (CameraManager) getContext().getSystemService(Context.CAMERA_SERVICE);
         getHolder().setFixedSize(9999, 9999);
@@ -193,6 +206,9 @@ public class CameraView extends SurfaceView {
         }
     }
 
+    /**
+     * 关闭相机
+     */
     private void closeCamera() {
         Log.e(TAG, "closeCamera: ");
         if (mCaptureSession != null) {
@@ -205,6 +221,9 @@ public class CameraView extends SurfaceView {
         }
     }
 
+    /**
+     * 刷新
+     */
     private void updatePreview() {
         if (mCameraDevice == null) {
             return;
@@ -219,6 +238,12 @@ public class CameraView extends SurfaceView {
         }
     }
 
+    /**
+     * 获取相机
+     * @param cameraManager cameraManager
+     * @return 相机id
+     * @throws CameraAccessException 异常
+     */
     private String getFrontCameraId(CameraManager cameraManager) throws CameraAccessException {
         String[] cameraIds = cameraManager.getCameraIdList();
         for (String cameraId : cameraIds) {
@@ -231,6 +256,9 @@ public class CameraView extends SurfaceView {
         return cameraIds[0];
     }
 
+    /**
+     * 创建CaptureSession
+     */
     private void createCaptureSession() {
         try {
             SurfaceHolder surfaceHolder = getHolder();
