@@ -1,6 +1,8 @@
-package com.ca.camera2;
+package com.smart.camera2;
 
 import android.os.Bundle;
+
+import com.smart.camera2.R;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -8,7 +10,7 @@ import androidx.appcompat.app.AppCompatActivity;
 public class MainActivity extends AppCompatActivity {
 
 
-    private CameraView camera_view;
+    private com.smart.camera2.CameraView camera_view;
 
     // 处理权限请求的回调
     @Override

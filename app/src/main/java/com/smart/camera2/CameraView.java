@@ -1,4 +1,4 @@
-package com.ca.camera2;
+package com.smart.camera2;
 
 import android.Manifest;
 import android.app.Activity;
@@ -131,10 +131,10 @@ public class CameraView extends SurfaceView {
         float ratioCamera = 16 / 9f;
         //以窄边为标准
         //竖屏
-        int screenWidthPortrait = (int) (PhoneHelper.getScreenWidthReal(getContext()) * ratioScreen);
+        int screenWidthPortrait = (int) (com.ca.camera2.PhoneHelper.getScreenWidthReal(getContext()) * ratioScreen);
         int screenHeightPortrait = (int) (screenWidthPortrait * ratioCamera);
         //横屏
-        int screenHeightLandScape = (int) (PhoneHelper.getScreenHeightReal(getContext()) * ratioScreen);
+        int screenHeightLandScape = (int) (com.ca.camera2.PhoneHelper.getScreenHeightReal(getContext()) * ratioScreen);
         int screenWidthLandScape = (int) (screenHeightLandScape * ratioCamera);
 
         ViewGroup.LayoutParams layoutParams = getLayoutParams();
