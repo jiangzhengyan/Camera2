@@ -2,8 +2,6 @@ package com.smart.camera2;
 
 import android.os.Bundle;
 
-import com.smart.camera2.R;
-
 import androidx.appcompat.app.AppCompatActivity;
 
 

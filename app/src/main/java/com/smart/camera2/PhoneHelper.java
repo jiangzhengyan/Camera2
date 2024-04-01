@@ -1,4 +1,4 @@
-package com.ca.camera2;
+package com.smart.camera2;
 
 import android.app.Activity;
 import android.content.Context;
