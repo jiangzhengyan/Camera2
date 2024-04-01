@@ -6,7 +6,7 @@
     tools:context=".MainActivity"
     android:id="@+id/rl">
 
-    <com.ca.camera2.CameraView
+    <com.smart.camera2.CameraView
         android:layout_alignParentEnd="true"
         android:layout_width="108dp"
         android:id="@+id/camera_view"
